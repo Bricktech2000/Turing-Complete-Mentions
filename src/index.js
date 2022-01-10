@@ -73,7 +73,7 @@ client.on('messageCreate', async (msg) => {
       var messageContent = '';
       for (var offset = 0; offset < batchSize; offset++) {
         const index = batch + offset;
-        if (index < users.length) messageContent += `<@${users[index].id}>`;
+        if (index < users.length) messageContent += `<@${users[index].id}> `;
       }
       console.log(messageContent);
       msg.reply(messageContent);
