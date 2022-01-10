@@ -1,7 +1,31 @@
-see Discord Assistant howto to create bot
-must use node 16 or higher
+(see Discord Assistant howto)
+
+https://www.smashingmagazine.com/2021/02/building-discord-bot-discordjs/
+create server
+go to discord developer portal: https://discord.com/developers/applications
+new application
+add a bot
+copy token
+
+go to oauth2
+check 'bot' checkbox
+check 'Manage Roles' checkbox
+copy URL
+visit url in browser
+select server
+click: authorize
+
+install nodejs 16 or higher
+https://stackoverflow.com/questions/68693319/why-am-i-getting-a-referenceerror-abortcontroller-is-not-defined-in-discord-js
+https://discordjs.guide/popular-topics/intents.html#privileged-intents
+
 
 bot link: https://discord.com/api/oauth2/authorize?client_id=930143352370921532&permissions=0&scope=bot
+
+Application -> Bot -> Privileged Gateway Intents:
+check PRESENCE INTENT
+check SERVER MEMBERS INTENT
+
 
 
 
