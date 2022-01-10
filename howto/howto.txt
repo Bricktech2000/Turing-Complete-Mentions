@@ -1,0 +1,9 @@
+see Discord Assistant howto to create bot
+must use node 16 or higher
+
+bot link: https://discord.com/api/oauth2/authorize?client_id=930143352370921532&permissions=0&scope=bot
+
+
+
+
+
