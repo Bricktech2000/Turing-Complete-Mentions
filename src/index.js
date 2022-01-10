@@ -31,8 +31,13 @@ client.login(discordBotToken);
 
 const getReplyFromMessage = async (msg) => {
   const isMentioned = msg.mentions.members.first()?.id == client.user.id;
-  if (isMentioned) return 'message registered.';
-  else return undefined;
-  // const code = msg.content.match(/.*?\b@\`.*?\`.*?/);
-  // console.log(code);
+  // if (isMentioned) return 'message registered.';
+  // else return undefined;
+
+  // https://stackoverflow.com/questions/432493/how-do-you-access-the-matched-groups-in-a-javascript-regular-expression
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
+  const mentions = msg.content.matchAll(/@\`(.*?)\`/g);
+  for (mention of mentions) {
+    console.log(mention[1]);
+  }
 };
