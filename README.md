@@ -35,7 +35,8 @@ Hosting this bot yourself is more involving, but allows you to customize it enti
    4. Go to the _Bot_ tab
    5. Click on _Add a Bot_
    6. Change the bot profile picture
-   7. Copy the `Bot Token`, this will be used later
+   7. Turn on both `PRESENCE INTENT` and `GUILD_MESSAGE_REACTIONS` permissions
+   8. Copy the `Bot Token`, this will be used later
 2. Host the bot
    1. Clone this repository
    2. Install the necessary packages: `npm install`
