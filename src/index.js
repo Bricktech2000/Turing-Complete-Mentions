@@ -9,7 +9,6 @@ if (process.argv.length != 3) {
 const discordBotToken = process.argv[2];
 console.log('Using Discord bot token: ' + discordBotToken);
 
-// https://stackoverflow.com/questions/64559390/none-of-my-discord-js-guildmember-events-are-emitting-my-user-caches-are-basica
 const client = new Client({
   intents: [
     Intents.FLAGS.GUILDS,
@@ -18,10 +17,6 @@ const client = new Client({
     Intents.FLAGS.GUILD_MEMBERS,
   ],
 });
-
-// https://github.com/Rapptz/discord.py/issues/2336
-// https://nodejs.org/api/events.html#events_emitter_setmaxlisteners_n
-// client.setMaxListeners(0);
 
 client.on('ready', () => {
   console.log('Ready.');
@@ -40,16 +35,12 @@ client.on('rateLimit', (info) => {
 });
 
 client.on('messageCreate', async (msg) => {
-  // https://stackoverflow.com/questions/49663283/how-to-detect-if-the-author-of-a-message-was-a-discord-bot/49667223#:~:text=If%20you%20want%20to%20check%20if%20the%20message%20author%20is,going%20if%20its%20another%20bot.
   if (msg.author.id === client.user.id) return;
 
-  // https://stackoverflow.com/questions/432493/how-do-you-access-the-matched-groups-in-a-javascript-regular-expression
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
   const mentions = msg.content.matchAll(/@\`(.*?)\`/g);
 
   for (const mention of mentions) {
     const source = mention[1];
-    // https://javascript.info/new-function
     const sendError = (msg, e) =>
       msg.channel.send(`**${e.name}**: ${e.message}`);
     var func;
@@ -63,9 +54,6 @@ client.on('messageCreate', async (msg) => {
       return;
     }
 
-    // https://stackoverflow.com/questions/50319939/how-to-list-all-members-from-a-specific-server
-    // https://stackoverflow.com/questions/48273185/discord-js-guild-id-is-undefined-even-though-definition-is-there
-    // https://stackoverflow.com/questions/53241954/client-guilds-get-not-working-as-intended
     const server = msg.guild;
 
     const users = [];
@@ -76,7 +64,6 @@ client.on('messageCreate', async (msg) => {
       // console.log('member', member);
       // console.log('user', member.user);
 
-      // https://stackoverflow.com/questions/61914382/how-can-i-check-if-a-person-has-went-online-offline-etc-in-discord-js
       var includeUser;
       try {
         includeUser = func(
@@ -106,7 +93,6 @@ client.on('messageCreate', async (msg) => {
         const index = batch + offset;
         if (index < users.length) messageContent += `<@${users[index].id}>`;
       }
-      // https://stackoverflow.com/questions/58749366/how-do-i-mention-a-role-with-discord-js
       console.log(messageContent);
       msg.reply(messageContent);
     }
