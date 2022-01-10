@@ -22,27 +22,16 @@ client.on('ready', () => {
   console.log('Ready.');
 });
 
-client.on('rateLimit', (info) => {
-  console.log(
-    `Rate limit hit ${
-      info.timeDifference
-        ? info.timeDifference
-        : info.timeout
-        ? info.timeout
-        : 'Unknown timeout '
-    }`
-  );
-});
+const sendError = (msg, e) => msg.channel.send(`**${e.name}**: ${e.message}`);
 
 client.on('messageCreate', async (msg) => {
   if (msg.author.id === client.user.id) return;
-
+  const server = msg.guild;
   const mentions = msg.content.matchAll(/@\`(.*?)\`/g);
 
   for (const mention of mentions) {
     const source = mention[1];
-    const sendError = (msg, e) =>
-      msg.channel.send(`**${e.name}**: ${e.message}`);
+
     var func;
     try {
       func = new Function(
@@ -54,19 +43,13 @@ client.on('messageCreate', async (msg) => {
       return;
     }
 
-    const server = msg.guild;
-
     const users = [];
     for (item of server.members.cache) {
       const member = item[1];
       const presence = member.presence || {};
-      // console.log('server', server);
-      // console.log('member', member);
-      // console.log('user', member.user);
 
-      var includeUser;
       try {
-        includeUser = func(
+        const includeUser = func(
           server,
           member,
           member.user,
@@ -79,12 +62,11 @@ client.on('messageCreate', async (msg) => {
           presence.activities,
           member._roles
         );
+        if (includeUser) users.push(member.user);
       } catch (e) {
         sendError(msg, e);
         return;
       }
-
-      if (includeUser) users.push(member.user);
     }
     const batchSize = 50;
     for (var batch = 0; batch < users.length; batch += batchSize) {
