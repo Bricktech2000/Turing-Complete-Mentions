@@ -1,1 +1,4 @@
-https://looka.com/explore
+figma.com
+bg: F1C40F
+color: black
+roboto extra bold 400 pt
