@@ -55,53 +55,19 @@ client.on('messageCreate', async (msg) => {
     var func;
     try {
       func = new Function(
-        ['server', 'member', 'user', 'status', 'activity', 'roles'],
+        ['server', 'member', 'user', 'status', 'activities', 'roles'],
         'return ' + source
       );
     } catch (e) {
       sendError(msg, e);
       return;
     }
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     // https://stackoverflow.com/questions/50319939/how-to-list-all-members-from-a-specific-server
     // https://stackoverflow.com/questions/48273185/discord-js-guild-id-is-undefined-even-though-definition-is-there
     // https://stackoverflow.com/questions/53241954/client-guilds-get-not-working-as-intended
     const server = msg.guild;
-    // console.log('server', server);
-    // https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
-    // const genRanHex = (size) =>
-    //   [...Array(size)]
-    //     .map(() => Math.floor(Math.random() * 16).toString(16))
-    //     .join('');
 
-    // const roleName = genRanHex(32);
-    // console.log('roleName', roleName);
-
-    // https://stackoverflow.com/questions/53329343/how-to-create-a-role-with-discord-js
-    // https://discord.js.org/#/docs/main/stable/class/RoleManager?scrollTo=create
-    // await server.roles.create({
-    //   name: roleName,
-    //   color: 'DEFAULT',
-    //   reason: 'Turing Complete Mentions',
-    // });
-
-    // https://stackoverflow.com/questions/57335046/discord-js-how-to-add-role-to-a-specific-user-id
-    // https://www.codegrepper.com/code-examples/javascript/discord.js+find+role+by+name
-    // https://stackoverflow.com/questions/50730747/discord-js-checking-bot-permissions
-    // if (!msg.guild.me.permissions.has('MANAGE_ROLES'))
-    //   throw 'Error - bot does not have permission to manage roles.';
-
-    // console.log('server mem', Object.keys(server.members.cache));
-    // console.log('server mem', server.members.cache);
-    // members = [];
-    // server.members.cache.forEach((member) => {
-    //   members.push(member.user.username);
-    // });
-    // console.log('members', members.length);
-
-    // msg.channel.send(`Debug: Evaluating Mentions`);
-    // https://github.com/discordjs/discord.js/issues/4930
     const users = [];
     for (item of server.members.cache) {
       const member = item[1];
@@ -131,25 +97,8 @@ client.on('messageCreate', async (msg) => {
         return;
       }
 
-      if (includeUser) {
-        // if (!member.roles.cache.has(MENTION.id)) {
-        // console.log('ADD', member.user.username);
-        users.push(member.user);
-        // }
-      } else {
-        // if (member.roles.cache.has(MENTION.id)) {
-        // console.log('REMOVE', member.user.username);
-        // users.push(member.user);
-        // }
-      }
-      // await sleep(rateLimitDelay); // prevent rate limit
-      // await sleep(100); // prevent rate limit
-      // users.push(JSON.stringify(member.user));
-      // if (func(user)) users.push(user);
+      if (includeUser) users.push(member.user);
     }
-    // msg.channel.send('Debug: Waiting for Promises');
-    // await sleep(5000);
-    // await Promise.all(promises);
     const batchSize = 50;
     for (var batch = 0; batch < users.length; batch += batchSize) {
       var messageContent = '';
@@ -158,15 +107,8 @@ client.on('messageCreate', async (msg) => {
         if (index < users.length) messageContent += `<@${users[index].id}>`;
       }
       // https://stackoverflow.com/questions/58749366/how-do-i-mention-a-role-with-discord-js
-      // https://stackoverflow.com/questions/45395255/discord-js-delete-single-message
-      // const message = await msg.channel.send('Debug: Simulating Mention');
-      // const message = await msg.channel.send(`<@&${MENTION.id}>`);
       console.log(messageContent);
       msg.reply(messageContent);
-      // const message = await msg.channel.send(messageContent);
-      // @`presence.online && user.username.startsWith('A')`
-      // await sleep(100);
-      // message.delete();
     }
 
     break; // ignore all other mentions
