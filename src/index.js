@@ -27,10 +27,11 @@ const sendError = (msg, e) => msg.channel.send(`**${e.name}**: ${e.message}`);
 client.on('messageCreate', async (msg) => {
   if (msg.author.id === client.user.id) return;
   const server = msg.guild;
-  const mentions = msg.content.matchAll(/@\`(.*?)\`/g);
+  const mentions = msg.content.matchAll(/([@?])\`(.*?)\`/g);
 
   for (const mention of mentions) {
-    const source = mention[1];
+    const doMention = mention[1] == '@';
+    const source = mention[2];
 
     var func;
     try {
@@ -57,10 +58,10 @@ client.on('messageCreate', async (msg) => {
             online: presence.status == 'online',
             idle: presence.status == 'idle',
             dnd: presence.status == 'dnd',
-            offline: presence.status == 'offline',
+            offline: presence.status == 'offline' || !presence.status, // set to offline if no status is set
           },
           presence.activities,
-          member._roles
+          member._roles.map((id) => server.roles.cache.get(id).name)
         );
         if (includeUser) users.push(member.user);
       } catch (e) {
@@ -68,16 +69,24 @@ client.on('messageCreate', async (msg) => {
         return;
       }
     }
-    const batchSize = 50;
-    for (var batch = 0; batch < users.length; batch += batchSize) {
-      var messageContent = '';
-      for (var offset = 0; offset < batchSize; offset++) {
-        const index = batch + offset;
-        if (index < users.length) messageContent += `<@${users[index].id}> `;
+
+    const characterLimit = 2000;
+    var messageContent = '';
+    for (var user of users) {
+      var currMessageContent = '';
+      if (doMention) currMessageContent = `<@${user.id}> `;
+      else currMessageContent = `@${user.username} `;
+      if (messageContent.length + currMessageContent.length > characterLimit) {
+        console.log(messageContent);
+        msg.reply(messageContent);
+        messageContent = '';
       }
-      console.log(messageContent);
-      msg.reply(messageContent);
+      messageContent += currMessageContent;
     }
+
+    console.log(`command: ${source}`);
+    console.log(`result: ${messageContent}`);
+    msg.reply(messageContent);
 
     break; // ignore all other mentions
   }

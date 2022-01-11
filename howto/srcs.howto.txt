@@ -11,6 +11,7 @@ https://stackoverflow.com/questions/53241954/client-guilds-get-not-working-as-in
 
 https://stackoverflow.com/questions/61914382/how-can-i-check-if-a-person-has-went-online-offline-etc-in-discord-js
 https://stackoverflow.com/questions/58749366/how-do-i-mention-a-role-with-discord-js
+https://stackoverflow.com/questions/48300358/js-discord-bot-get-role
 
 
 
