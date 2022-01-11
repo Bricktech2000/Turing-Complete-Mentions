@@ -56,6 +56,10 @@ const runBot = (msg) => {
     for (item of server.members.cache) {
       const member = item[1];
       const presence = member.presence || {};
+      var roles = {};
+      for (role of member.roles.cache) {
+        roles[role[1].name] = member._roles.includes(role[1].id);
+      }
 
       try {
         const includeUser = func(
@@ -69,7 +73,7 @@ const runBot = (msg) => {
             offline: presence.status == 'offline' || !presence.status, // set to offline if no status is set
           },
           presence.activities,
-          member._roles.map((id) => server.roles.cache.get(id).name)
+          roles
         );
         if (includeUser) users.push(member.user);
       } catch (e) {

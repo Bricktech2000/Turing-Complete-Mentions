@@ -34,8 +34,8 @@
   activities: {
     // ...
   },
-  roles: [
-    'mod',
+  roles: {
+    'mod': true,
     // ...
-  ],
+  },
 }
