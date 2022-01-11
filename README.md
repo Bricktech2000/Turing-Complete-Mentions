@@ -94,7 +94,7 @@ member: {
    nickname: null,
    pending: false,
    communicationDisabledUntilTimestamp: null,
-   // \_roles: [ '929039239746846731' ],
+   // _roles: [ '929039239746846731' ],
 },
 user: {
    id: '792482454228566016',
