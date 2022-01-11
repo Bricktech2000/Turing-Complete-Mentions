@@ -56,7 +56,8 @@ const runBot = (msg) => {
     for (item of server.members.cache) {
       const member = item[1];
       const presence = member.presence || {};
-      var roles = {};
+
+      var roles = { length: member._roles.length };
       for (role of member.roles.cache) {
         roles[role[1].name] = member._roles.includes(role[1].id);
       }
