@@ -25,6 +25,14 @@ client.on('ready', () => {
 const sendError = (msg, e) => msg.channel.send(`**${e.name}**: ${e.message}`);
 
 client.on('messageCreate', async (msg) => {
+  runBot(msg);
+});
+
+client.on('messageUpdate', (oldMsg, newMsg) => {
+  runBot(newMsg);
+});
+
+const runBot = (msg) => {
   if (msg.author.id === client.user.id) return;
   const server = msg.guild;
   const mentions = msg.content.matchAll(/([@?])\`(.*?)\`/g);
@@ -86,10 +94,10 @@ client.on('messageCreate', async (msg) => {
 
     console.log(`command: ${source}`);
     console.log(`result: ${messageContent}`);
-    msg.reply(messageContent);
+    msg.reply(messageContent || 'No users found.');
 
     break; // ignore all other mentions
   }
-});
+};
 
 client.login(discordBotToken);
