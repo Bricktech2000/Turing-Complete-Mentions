@@ -32,7 +32,7 @@ client.on('messageUpdate', (oldMsg, newMsg) => {
   runBot(newMsg);
 });
 
-const runBot = (msg) => {
+const runBot = async (msg) => {
   if (msg.author.id === client.user.id) return;
   const server = msg.guild;
   const mentions = msg.content.matchAll(/([@?])\`(.*?)\`/g);
@@ -53,6 +53,8 @@ const runBot = (msg) => {
     }
 
     const users = [];
+    await server.members.fetch(); // Github Copilot magic
+    await server.roles.fetch();
     for (item of server.members.cache) {
       const member = item[1];
       const presence = member.presence || {};
