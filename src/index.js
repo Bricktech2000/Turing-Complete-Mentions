@@ -38,7 +38,7 @@ const runBot = async (msg) => {
   const mentions = msg.content.matchAll(/([@?])\`(.*?)\`/g);
 
   for (const mention of mentions) {
-    const doMention = mention[1] == '@';
+    const doMention = mention[1] == '@'; // @mention or ?search
     const source = mention[2];
 
     var func;
@@ -55,14 +55,14 @@ const runBot = async (msg) => {
     const users = [];
     await server.members.fetch(); // Github Copilot magic
     await server.roles.fetch();
+
     for (item of server.members.cache) {
       const member = item[1];
       const presence = member.presence || {};
 
       var roles = { length: member._roles.length };
-      for (role of member.roles.cache) {
+      for (role of member.roles.cache)
         roles[role[1].name] = member._roles.includes(role[1].id);
-      }
 
       try {
         const includeUser = func(
@@ -85,23 +85,29 @@ const runBot = async (msg) => {
       }
     }
 
+    console.log(`command: ${source}`);
+    console.log(`result:`);
+
     const characterLimit = 2000;
     var messageContent = '';
+    if (users.length == 0) messageContent = 'No users found.';
+
     for (var user of users) {
       var currMessageContent = '';
       if (doMention) currMessageContent = `<@${user.id}> `;
       else currMessageContent = `@${user.username} `;
+
       if (messageContent.length + currMessageContent.length > characterLimit) {
         console.log(messageContent);
         msg.reply(messageContent);
         messageContent = '';
       }
+
       messageContent += currMessageContent;
     }
 
-    console.log(`command: ${source}`);
-    console.log(`result: ${messageContent}`);
-    msg.reply(messageContent || 'No users found.');
+    console.log(messageContent);
+    msg.reply(messageContent);
 
     break; // ignore all other mentions
   }
