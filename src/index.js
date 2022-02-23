@@ -1,5 +1,5 @@
-const { exit } = require('process');
-const { Client, Intents } = require('discord.js');
+import { exit } from 'process';
+import { Client, Intents } from 'discord.js';
 
 if (process.argv.length != 3) {
   console.log('Usage: node . DISCORD_BOT_TOKEN');
