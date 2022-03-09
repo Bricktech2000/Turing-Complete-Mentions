@@ -37,7 +37,7 @@ const runBot = async (msg) => {
   const server = msg.guild;
   const mentions = msg.content.matchAll(/([@?])\`(.*?)\`/g);
 
-  for (const mention of mentions) {
+  for (var mention of mentions) {
     const doMention = mention[1] == '@'; // @mention or ?search
     const source = mention[2];
 
@@ -56,12 +56,12 @@ const runBot = async (msg) => {
     await server.members.fetch(); // Github Copilot magic
     await server.roles.fetch();
 
-    for (item of server.members.cache) {
+    for (var item of server.members.cache) {
       const member = item[1];
       const presence = member.presence || {};
 
       var roles = { length: member._roles.length };
-      for (role of member.roles.cache)
+      for (var role of member.roles.cache)
         roles[role[1].name] = member._roles.includes(role[1].id);
 
       try {
