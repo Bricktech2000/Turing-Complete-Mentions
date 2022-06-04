@@ -117,7 +117,8 @@ activities: {
    // ...
 },
 roles: {
-'mod': true,
-// ...
+   'mod': true,
+   // ...
+   length: 2,
 },
 ```
