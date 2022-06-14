@@ -23,6 +23,8 @@ client.on('ready', () => {
 });
 
 const sendError = (msg, e) => msg.channel.send(`**${e.name}**: ${e.message}`);
+const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+process.on('unhandledRejection', () => {}); // ignore all promise rejections
 
 client.on('messageCreate', async (msg) => {
   runBot(msg);
@@ -41,14 +43,18 @@ const runBot = async (msg) => {
     const doMention = mention[1] == '@'; // @mention or ?search
     const source = mention[2];
 
+    console.log(`command: ${source}`);
+    console.log(`result:`);
+
     var func;
     try {
-      func = new Function(
+      func = new AsyncFunction(
         ['guild', 'member', 'user', 'status', 'activities', 'roles'],
         'return ' + source
       );
     } catch (e) {
       sendError(msg, e);
+      console.log(e.name, e.message);
       return;
     }
 
@@ -66,7 +72,7 @@ const runBot = async (msg) => {
           roles[role[1].name] = member._roles.includes(role[1].id);
 
       try {
-        const includeUser = func(
+        const includeUser = await func(
           guild,
           member,
           member.user,
@@ -81,26 +87,13 @@ const runBot = async (msg) => {
           presence.activities,
           roles
         );
-        if (includeUser) {
-          users.push(member.user);
-          console.log(
-            guild,
-            member,
-            member.user,
-            presence.status,
-            presence.activities,
-            roles,
-            presence
-          );
-        }
+        if (includeUser) users.push(member.user);
       } catch (e) {
         sendError(msg, e);
+        console.log(e.name, e.message);
         return;
       }
     }
-
-    console.log(`command: ${source}`);
-    console.log(`result:`);
 
     const characterLimit = 2000;
     var messageContent = '';

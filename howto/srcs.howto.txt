@@ -13,6 +13,8 @@ https://stackoverflow.com/questions/61914382/how-can-i-check-if-a-person-has-wen
 https://stackoverflow.com/questions/58749366/how-do-i-mention-a-role-with-discord-js
 https://stackoverflow.com/questions/48300358/js-discord-bot-get-role
 
+https://davidwalsh.name/async-function-class
+https://thecodebarbarian.com/unhandled-promise-rejections-in-node.js.html
 
 
 
