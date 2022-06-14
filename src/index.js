@@ -34,7 +34,7 @@ client.on('messageUpdate', (oldMsg, newMsg) => {
 
 const runBot = async (msg) => {
   if (msg.author.id === client.user.id) return;
-  const server = msg.guild;
+  const guild = msg.guild;
   const mentions = msg.content.matchAll(/([@?])\`(.*?)\`/g);
 
   for (var mention of mentions) {
@@ -44,7 +44,7 @@ const runBot = async (msg) => {
     var func;
     try {
       func = new Function(
-        ['server', 'member', 'user', 'status', 'activities', 'roles'],
+        ['guild', 'member', 'user', 'status', 'activities', 'roles'],
         'return ' + source
       );
     } catch (e) {
@@ -53,32 +53,46 @@ const runBot = async (msg) => {
     }
 
     const users = [];
-    await server.members.fetch(); // Github Copilot magic
-    await server.roles.fetch();
+    await guild.members.fetch(); // Github Copilot magic
+    await guild.roles.fetch();
 
-    for (var item of server.members.cache) {
+    for (var item of guild.members.cache) {
       const member = item[1];
       const presence = member.presence || {};
 
       var roles = { length: member._roles.length };
       for (var role of member.roles.cache)
-        roles[role[1].name] = member._roles.includes(role[1].id);
+        if (role[1].name !== '@everyone')
+          roles[role[1].name] = member._roles.includes(role[1].id);
 
       try {
         const includeUser = func(
-          server,
+          guild,
           member,
           member.user,
           {
-            online: presence.status == 'online',
-            idle: presence.status == 'idle',
-            dnd: presence.status == 'dnd',
-            offline: presence.status == 'offline' || !presence.status, // set to offline if no status is set
+            online: presence.status === 'online',
+            desktop: presence.clientStatus?.desktop === 'online',
+            mobile: presence.clientStatus?.mobile === 'online',
+            idle: presence.status === 'idle',
+            dnd: presence.status === 'dnd',
+            offline: presence.status === 'offline' || !presence.status, // set to offline if no status is set
           },
           presence.activities,
           roles
         );
-        if (includeUser) users.push(member.user);
+        if (includeUser) {
+          users.push(member.user);
+          console.log(
+            guild,
+            member,
+            member.user,
+            presence.status,
+            presence.activities,
+            roles,
+            presence
+          );
+        }
       } catch (e) {
         sendError(msg, e);
         return;
