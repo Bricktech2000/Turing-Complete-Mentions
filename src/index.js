@@ -22,7 +22,7 @@ client.on('ready', () => {
   console.log('Ready.');
 });
 
-const sendError = (msg, e) => msg.channel.send(`**${e.name}**: ${e.message}`);
+const sendError = (msg, e) => msg.reply(`**${e.name}**: ${e.message}`);
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 process.on('unhandledRejection', () => {}); // ignore all promise rejections
 
@@ -37,7 +37,7 @@ client.on('messageUpdate', (oldMsg, newMsg) => {
 const runBot = async (msg) => {
   if (msg.author.id === client.user.id) return;
   const guild = msg.guild;
-  const mentions = msg.content.matchAll(/([@?])\`(.*?)\`/g);
+  const mentions = msg.content.matchAll(/([@?])`(.*?)`/g);
 
   for (var mention of mentions) {
     const doMention = mention[1] == '@'; // @mention or ?search
@@ -97,7 +97,23 @@ const runBot = async (msg) => {
 
     const characterLimit = 2000;
     var messageContent = '';
-    if (users.length == 0) messageContent = 'No users found.';
+
+    const member = await guild.members.fetch(msg.author.id);
+    if (doMention && !member.permissions.has('MENTION_EVERYONE')) {
+      const nonEmptySource = source || '\u200b'; // zero-width space
+      sendError(msg, {
+        name: 'PermissionError',
+        message: `You do not have permission to mention members through \`\`@\`${nonEmptySource}\` \`\`. You can still search through members using \`\`?\`${nonEmptySource}\` \`\`.`,
+      });
+      continue;
+    }
+    if (users.length == 0) {
+      sendError(msg, {
+        name: 'NoResultsError',
+        message: `No results found`,
+      });
+      continue;
+    }
 
     for (var user of users) {
       var currMessageContent = '';

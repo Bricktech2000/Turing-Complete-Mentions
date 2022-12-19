@@ -15,7 +15,7 @@ Adding this bot to your server allows you to get the functionality of this assis
 
 ### Setup
 
-1. Click on the following link: <https://discord.com/api/oauth2/authorize?client_id=930143352370921532&permissions=274877908992&scope=bot>
+1. Click on the following link: <https://discord.com/api/oauth2/authorize?client_id=930143352370921532&permissions=275146344448&scope=bot>
 2. Select the server you would like to add the bot to
 3. Click on _Authorize_
 
@@ -56,6 +56,7 @@ Below are the steps to get an invite link for your bot.
 4. Check following permissions:
    - Send Messages
    - Send Messages in Threads
+   - Manage Roles
 5. Copy the generated invite link.
 
 ## Usage
@@ -73,6 +74,8 @@ To look for users without mentioning them, use the following syntax anywhere wit
 ```JavaScript
 ?`JAVASCRIPT_CODE`
 ```
+
+Note that only members with the `MENTION_EVERYONE` permission can use the `@` syntax. The `?` syntax can be used by anyone.
 
 ### Argument Structure
 
@@ -135,7 +138,6 @@ guild: {
   invites: /* ... */,
   scheduledEvents: /* ... */,
 },
-
 member: {
   joinedTimestamp: 1641595165880,
   premiumSinceTimestamp: null,
