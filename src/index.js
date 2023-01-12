@@ -39,14 +39,14 @@ const runBot = async (msg) => {
   const guild = msg.guild;
   const mentions = msg.content.matchAll(/([@?])`(.*?)`/g);
 
-  for (var mention of mentions) {
+  for (let mention of mentions) {
     const doMention = mention[1] == '@'; // @mention or ?search
     const source = mention[2];
 
     console.log(`command: ${source}`);
     console.log(`result:`);
 
-    var func;
+    let func;
     try {
       func = new AsyncFunction(
         ['guild', 'member', 'user', 'status', 'activities', 'roles'],
@@ -62,12 +62,12 @@ const runBot = async (msg) => {
     await guild.members.fetch(); // Github Copilot magic
     await guild.roles.fetch();
 
-    for (var item of guild.members.cache) {
+    for (let item of guild.members.cache) {
       const member = item[1];
       const presence = member.presence || {};
 
-      var roles = { length: member._roles.length };
-      for (var role of member.roles.cache)
+      let roles = { length: member._roles.length };
+      for (let role of member.roles.cache)
         if (role[1].name !== '@everyone')
           roles[role[1].name] = member._roles.includes(role[1].id);
 
@@ -96,7 +96,7 @@ const runBot = async (msg) => {
     }
 
     const characterLimit = 2000;
-    var messageContent = '';
+    let messageContent = '';
 
     const member = await guild.members.fetch(msg.author.id);
     if (doMention && !member.permissions.has('MENTION_EVERYONE')) {
@@ -115,8 +115,8 @@ const runBot = async (msg) => {
       continue;
     }
 
-    for (var user of users) {
-      var currMessageContent = '';
+    for (let user of users) {
+      let currMessageContent = '';
       if (doMention) currMessageContent = `<@${user.id}> `;
       else currMessageContent = `@${user.username} `;
 
