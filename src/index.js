@@ -59,7 +59,7 @@ const runBot = async (msg) => {
     }
 
     const users = [];
-    await guild.members.fetch(); // Github Copilot magic
+    await guild.members.fetch(); // GitHub Copilot magic
     await guild.roles.fetch();
 
     for (let item of guild.members.cache) {
