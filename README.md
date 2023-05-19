@@ -1,6 +1,6 @@
 # Turing Complete Mentions
 
-A Discord bot that allows for Turing-Complete mentions
+_A Discord bot that allows for Turing-Complete mentions_
 
 ## Overview
 
